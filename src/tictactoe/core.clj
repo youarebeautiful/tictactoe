@@ -24,37 +24,40 @@
 
 ;; Extracting rows, columns and diagonals
 
+(def vec-vals
+  (comp vec vals))
+
 (defn first-row
   [board]
-  (vec (vals (take 3 board))))
+  (vec-vals (take 3 board)))
 
 (defn second-row
   [board]
-  (vec (vals (take 3 (drop 3 board)))))
+  (vec-vals (take 3 (drop 3 board))))
 
 (defn third-row
   [board]
-  (vec (vals (drop 6 board))))
+  (vec-vals (drop 6 board)))
 
 (defn first-column
   [board]
-  (vec (vals (take-nth 3 board))))
+  (vec-vals (take-nth 3 board)))
 
 (defn second-column
   [board]
-  (vec (vals (take-nth 3 (dissoc board :1A)))))
+  (vec-vals (take-nth 3 (dissoc board :1A))))
 
 (defn third-column
   [board]
-  (vec (vals (take-nth 3 (dissoc board :1A :1B)))))
+  (vec-vals (take-nth 3 (dissoc board :1A :1B))))
 
 (defn first-diag
   [board]
-  (vec (vals (select-keys board [:1A :2B :3C]))))
+  (vec-vals (select-keys board [:1A :2B :3C])))
 
 (defn second-diag
   [board]
-  (vec (vals (select-keys board [:1C :2B :3A]))))
+  (vec-vals (select-keys board [:1C :2B :3A])))
 
 (def board-funs
   (juxt first-row    second-row    third-row
