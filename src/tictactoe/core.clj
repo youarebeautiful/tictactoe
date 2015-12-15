@@ -74,8 +74,7 @@
   (let [move (keyword (read-line))]
     (if (valid-move? board move)
         (assoc board move player)
-        (do (println "It's not a valid move, I'll crash now.")
-            (board)))))
+            (throw (Exception. "You done messed up.")))))
 
 (defn x-moves
   [board]
