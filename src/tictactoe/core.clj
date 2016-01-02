@@ -1,4 +1,5 @@
 (ns tictactoe.core
+  (require [clojure.string :as s])
   (:gen-class))
 
 (def first-board
@@ -11,7 +12,7 @@
 (defn pprint-board
   "Pretty prints a board"
   [board]
-  (let [make-row  #(clojure.string/join "   " (vals (select-keys board %)))
+  (let [make-row  #(s/join "   " (vals (select-keys board %)))
         first-row  (make-row [:1A :1B :1C])
         second-row (make-row [:2A :2B :2C])
         third-row  (make-row [:3A :3B :3C])]
@@ -69,18 +70,18 @@
 (defn valid-move?
   "Checks if field is taken or not"
   [board move]
-  (= ((keyword (clojure.string/upper-case move)) board) "-"))
+  (= ((keyword (s/upper-case move)) board) "-"))
 
 (defn almost-valid?
   [board move]
-  (valid-move? board (clojure.string/reverse move)))
+  (valid-move? board (s/reverse move)))
 
 (defn make-move-valid
   "Has to take a string" ;;TODO read about typed clojure
   [board move]
   (cond
-    (valid-move? board move) (clojure.string/upper-case move)
-    (almost-valid? board move) (clojure.string/reverse (clojure.string/upper-case move))
+    (valid-move? board move) (s/upper-case move)
+    (almost-valid? board move) (s/reverse (s/upper-case move))
     :else false))
 
 (defn valid-or-almost?
