@@ -69,15 +69,31 @@
 (defn valid-move?
   "Checks if field is taken or not"
   [board move]
-  (= ((keyword move) board) "-"))
+  (= ((keyword (clojure.string/upper-case move)) board) "-"))
+
+(defn almost-valid?
+  [board move]
+  (valid-move? board (clojure.string/reverse move)))
+
+(defn make-move-valid
+  "Has to take a string" ;;TODO read about typed clojure
+  [board move]
+  (cond
+    (valid-move? board move) (clojure.string/upper-case move)
+    (almost-valid? board move) (clojure.string/reverse (clojure.string/upper-case move))
+    :else false))
+
+(defn valid-or-almost?
+  [board move]
+  (some true? ((juxt valid-move? almost-valid?) board move)))
 
 (defn new-board
   "Makes a new board from given board and user input"
   [board player]
-  (let [move (keyword (read-line))]
-    (if (valid-move? board move)
-        (assoc board move player)
-            (throw (Exception. "You done messed up.")))))
+  (let [move (read-line)]
+    (if (valid-or-almost? board move)
+      (assoc board (keyword (make-move-valid board move)) player)
+      (throw (Exception. "You done messed up.")))))
 
 (defn x-moves
   [board]
@@ -108,10 +124,10 @@
   (comment (let [board-funs (juxt first-row    second-row    third-row
                                   first-column second-column third-column
                                   first-diag   second-diag)]))
-    (->> (board-funs board)
-         (map winner)
-         (map boolean)
-         (some true?)))
+  (->> (board-funs board)
+       (map winner)
+       (map boolean)
+       (some true?)))
 
 (defn who-won?
   [wannabe-winners]
@@ -121,7 +137,7 @@
 
 (defn game
   []
-  (println "Darn, move. Valid moves are 1A, 2B etc.")
+  (println "Darn, move. *choo choo*")
   (loop [i 0
          board first-board]
     (pprint-board board)
